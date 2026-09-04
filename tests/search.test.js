@@ -87,7 +87,10 @@ test('仅显示收藏项目', () => {
     favoriteList: ['foo/bar', 'baz/qux']
   });
   assert.equal(result.length, 2);
-  assert.deepEqual(result.map((p) => p.fullName), ['foo/bar', 'baz/qux']);
+  assert.deepEqual(
+    result.map((p) => p.fullName),
+    ['foo/bar', 'baz/qux']
+  );
 });
 
 test('组合筛选：关键词 + 语言', () => {
@@ -115,10 +118,7 @@ test('getLanguages 返回去重后的语言列表', () => {
 });
 
 test('getLanguages 排除未标注语言', () => {
-  const projectsWithUnknown = [
-    ...mockProjects,
-    { fullName: 'test/unknown', language: '未标注' }
-  ];
+  const projectsWithUnknown = [...mockProjects, { fullName: 'test/unknown', language: '未标注' }];
   const languages = getLanguages(projectsWithUnknown);
   assert.ok(!languages.includes('未标注'));
 });

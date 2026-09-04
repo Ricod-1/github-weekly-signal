@@ -12,15 +12,17 @@ test('解析 GitHub Trending 条目并保留排名、仓库名、语言和周增
       <a href="/octo/rocket/stargazers">12,000</a>
     </article>`;
 
-  assert.deepEqual(parseTrendingHtml(html), [{
-    rank: 1,
-    fullName: 'octo/rocket',
-    owner: 'octo',
-    name: 'rocket',
-    description: 'A fast toolkit',
-    language: 'TypeScript',
-    starsThisWeek: 1234,
-    stars: 12000,
-    url: 'https://github.com/octo/rocket'
-  }]);
+  assert.deepEqual(parseTrendingHtml(html), [
+    {
+      rank: 1,
+      fullName: 'octo/rocket',
+      owner: 'octo',
+      name: 'rocket',
+      description: 'A fast toolkit',
+      language: 'TypeScript',
+      starsThisWeek: 1234,
+      stars: 12000,
+      url: 'https://github.com/octo/rocket'
+    }
+  ]);
 });
