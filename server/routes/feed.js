@@ -6,10 +6,9 @@
  */
 
 import { Router } from 'express';
-import { getLatestReport, listReports, getReportByWeekKey } from '../storage.js';
+import { listReports, getReportByWeekKey } from '../storage.js';
 import { exportReportToMarkdown } from '../utils/exporter.js';
 import { notFound } from '../middleware/errorHandler.js';
-import { config } from '../config.js';
 
 const router = Router();
 
@@ -22,11 +21,13 @@ router.get('/rss', async (_req, res, next) => {
     const reports = await listReports();
     const latest = reports[0];
 
-    const items = reports.slice(0, 20).map((report) => {
-      const projectList = report.projects
-        .map((p) => `<li><strong>${p.fullName}</strong> - ${p.description || ''}</li>`)
-        .join('');
-      return `
+    const items = reports
+      .slice(0, 20)
+      .map((report) => {
+        const projectList = report.projects
+          .map((p) => `<li><strong>${p.fullName}</strong> - ${p.description || ''}</li>`)
+          .join('');
+        return `
     <item>
       <title>${escapeXml(report.title)}</title>
       <link>https://github.com/trending?since=weekly</link>
@@ -37,7 +38,8 @@ router.get('/rss', async (_req, res, next) => {
         <ol>${projectList}</ol>
       ]]></description>
     </item>`;
-    }).join('');
+      })
+      .join('');
 
     const rssContent = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">

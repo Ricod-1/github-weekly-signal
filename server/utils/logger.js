@@ -29,20 +29,6 @@ function getTimestamp() {
 }
 
 /**
- * 获取调用栈信息（用于定位日志来源）
- * @returns {string} 调用位置信息
- */
-function getCallerInfo() {
-  const stack = new Error().stack;
-  if (!stack) return '';
-  const lines = stack.split('\n');
-  // 第0行是 Error，第1行是 getCallerInfo，第2行是 log 方法，第3行是实际调用者
-  const callerLine = lines[4] || lines[3] || '';
-  const match = callerLine.match(/\(([^)]+)\)/);
-  return match ? match[1] : callerLine.trim();
-}
-
-/**
  * 格式化日志消息
  * @param {string} level - 日志级别
  * @param {string} message - 日志消息

@@ -45,7 +45,9 @@ async function mapWithConcurrency(items, mapper, concurrency = 3) {
       }
 
       completedCount++;
-      logger.debug(`[Worker-${workerId}] 任务完成 [${index + 1}/${items.length}]，总进度: ${completedCount}/${items.length}`);
+      logger.debug(
+        `[Worker-${workerId}] 任务完成 [${index + 1}/${items.length}]，总进度: ${completedCount}/${items.length}`
+      );
     }
   }
 
@@ -81,18 +83,11 @@ export function weekKey(date = new Date()) {
  * @param {object} [retryOptions] - 重试配置
  * @returns {Promise<string>} README 内容，失败时返回空字符串
  */
-export async function readProjectReadme(
-  fullName,
-  fetchImpl = fetch,
-  retryOptions = { retries: 3, delayMs: 400 }
-) {
+export async function readProjectReadme(fullName, fetchImpl = fetch, retryOptions = { retries: 3, delayMs: 400 }) {
   return withRetry(async () => {
-    const response = await fetchImpl(
-      `https://raw.githubusercontent.com/${fullName}/HEAD/README.md`,
-      {
-        headers: { 'User-Agent': 'github-weekly-signal/0.2' }
-      }
-    );
+    const response = await fetchImpl(`https://raw.githubusercontent.com/${fullName}/HEAD/README.md`, {
+      headers: { 'User-Agent': 'github-weekly-signal/0.2' }
+    });
     if (!response.ok) {
       throw new Error(`README 获取失败: ${response.status}`);
     }
@@ -132,18 +127,18 @@ async function processSingleProject(project, { fetchImpl, explain, index, total 
   const startTime = Date.now();
 
   // 1. 读取 README（失败不阻断，返回空字符串）
-  const readme = await withRetry(
-    () => readProjectReadme(project.fullName, fetchImpl, { retries: 2, delayMs: 300 })
+  const readme = await withRetry(() =>
+    readProjectReadme(project.fullName, fetchImpl, { retries: 2, delayMs: 300 })
   ).catch((error) => {
     logger.warn(`[${index + 1}/${total}] README 读取失败: ${project.fullName}`, error.message);
     return '';
   });
 
   // 2. 生成 AI 导读（失败使用降级内容）
-  const explanation = await withRetry(
-    () => explain(project, readme, { fetchImpl }),
-    { retries: 2, delayMs: 500 }
-  ).catch((error) => {
+  const explanation = await withRetry(() => explain(project, readme, { fetchImpl }), {
+    retries: 2,
+    delayMs: 500
+  }).catch((error) => {
     logger.warn(`[${index + 1}/${total}] AI 导读失败: ${project.fullName}`, error.message);
     return fallbackExplanation(project);
   });
@@ -187,12 +182,13 @@ export async function generateWeeklyReport({
 
   const explainedResults = await mapWithConcurrency(
     targetProjects,
-    (project, index) => processSingleProject(project, {
-      fetchImpl,
-      explain,
-      index,
-      total: targetProjects.length
-    }),
+    (project, index) =>
+      processSingleProject(project, {
+        fetchImpl,
+        explain,
+        index,
+        total: targetProjects.length
+      }),
     concurrency
   );
 

@@ -30,7 +30,11 @@ export function buildDeepSeekRequest({ model = 'deepseek-chat', project, readme 
   };
 }
 
-export async function explainProject(project, readme, { fetchImpl = fetch, model = process.env.DEEPSEEK_MODEL || 'deepseek-chat' } = {}) {
+export async function explainProject(
+  project,
+  readme,
+  { fetchImpl = fetch, model = process.env.DEEPSEEK_MODEL || 'deepseek-chat' } = {}
+) {
   const request = buildDeepSeekRequest({ model, project, readme });
   if (!process.env.DEEPSEEK_API_KEY) {
     return {
