@@ -1,0 +1,8 @@
+node_modules/
+public/generated/
+data/
+*.log
+*.err
+.env
+package-lock.json
+temp-*.html

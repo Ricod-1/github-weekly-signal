@@ -1,0 +1,37 @@
+# 依赖
+node_modules/
+
+# 环境变量
+.env
+.env.local
+.env.*.local
+
+# 日志文件
+*.log
+*.err
+server.log
+server.err
+
+# 运行时数据
+data/
+public/generated/
+
+# 编辑器与系统
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# 超级权限配置
+.superpowers/
+
+# 临时文件
+temp-*.html
+home-desktop.png
+
+# 构建产物
+dist/
+build/
+coverage/
