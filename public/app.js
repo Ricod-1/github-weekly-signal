@@ -5,7 +5,7 @@
  * ============================================================
  */
 
-import { initTheme, toggleTheme, getCurrentTheme } from './modules/theme.js';
+import { initTheme, toggleTheme } from './modules/theme.js';
 import { filterProjects, getLanguages } from './modules/search.js';
 import { isFavorite, toggleFavorite, getFavorites } from './modules/favorites.js';
 import { fetchReportList, fetchReport, fetchLatestReport, formatDate } from './modules/history.js';
@@ -14,11 +14,12 @@ import { fetchReportList, fetchReport, fetchLatestReport, formatDate } from './m
 // 全局状态
 // ============================================================
 const state = {
-  report: null,           // 当前周报数据
-  allProjects: [],        // 当前周报的所有项目（未筛选）
-  filteredProjects: [],   // 筛选后的项目列表
-  selected: 0,            // 当前选中的项目索引（在 filteredProjects 中）
-  filters: {              // 当前筛选条件
+  report: null, // 当前周报数据
+  allProjects: [], // 当前周报的所有项目（未筛选）
+  filteredProjects: [], // 筛选后的项目列表
+  selected: 0, // 当前选中的项目索引（在 filteredProjects 中）
+  filters: {
+    // 当前筛选条件
     keyword: '',
     language: 'all',
     favoritesOnly: false
@@ -37,13 +38,17 @@ const $$ = (selector) => document.querySelectorAll(selector);
  * @returns {string} 转义后的字符串
  */
 const escapeHtml = (value = '') =>
-  String(value).replace(/[&<>"']/g, (char) => ({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#039;'
-  }[char]));
+  String(value).replace(
+    /[&<>"']/g,
+    (char) =>
+      ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      })[char]
+  );
 
 /**
  * 格式化数字（大于 9999 时使用紧凑格式）
@@ -313,7 +318,8 @@ function initSearchAndFilters() {
 function populateLanguageFilter() {
   const languages = getLanguages(state.allProjects);
   const select = $('#language-filter');
-  select.innerHTML = '<option value="all">全部语言</option>' +
+  select.innerHTML =
+    '<option value="all">全部语言</option>' +
     languages.map((lang) => `<option value="${escapeHtml(lang)}">${escapeHtml(lang)}</option>`).join('');
 }
 
@@ -381,7 +387,8 @@ function setReport(report) {
 
   // 更新 UI
   $('#report-week').textContent = report.title;
-  $('#report-count').textContent = `${report.language === 'all' ? '全语言' : report.language} · ${report.projects.length} 项`;
+  $('#report-count').textContent =
+    `${report.language === 'all' ? '全语言' : report.language} · ${report.projects.length} 项`;
 
   // 填充语言筛选
   populateLanguageFilter();
@@ -426,7 +433,8 @@ function showLoadingState() {
  * @param {string} message - 错误消息
  */
 function showErrorState(message) {
-  $('#feature-card').innerHTML = `<div class="empty">加载失败：${escapeHtml(message)}<br /><br />服务启动后，系统会在每周日 18:00 自动抓取 GitHub 周榜并生成中文导读。</div>`;
+  $('#feature-card').innerHTML =
+    `<div class="empty">加载失败：${escapeHtml(message)}<br /><br />服务启动后，系统会在每周日 18:00 自动抓取 GitHub 周榜并生成中文导读。</div>`;
   $('#ranking-list').innerHTML = '<div class="empty">暂无榜单数据。</div>';
   $('#report-week').textContent = '加载失败';
 }
@@ -494,7 +502,7 @@ function initRefreshButton() {
           // 1. generatedAt 变了（同一天内重新生成）
           // 2. 或者 weekKey 变了（跨周生成）
           // 3. 或者超时
-          const isGenerated = (latest.generatedAt !== oldGeneratedAt) || (latest.weekKey !== oldWeekKey);
+          const isGenerated = latest.generatedAt !== oldGeneratedAt || latest.weekKey !== oldWeekKey;
           if (isGenerated || attempts >= maxAttempts) {
             clearInterval(poll);
             await loadReport(null); // 重新加载最新周报
@@ -509,11 +517,10 @@ function initRefreshButton() {
             btn.classList.remove('loading');
             textEl.textContent = originalText;
           }
-        } catch (e) {
+        } catch {
           // 轮询出错不阻断，继续等
         }
       }, 10000); // 每 10 秒检查一次
-
     } catch (error) {
       showToast(`更新失败：${error.message}`);
       btn.disabled = false;
@@ -548,7 +555,7 @@ async function boot() {
 
     // 加载历史周报列表
     initHistory();
-  } catch (error) {
+  } catch {
     showErrorState('暂无周报，等待本周日自动生成');
   }
 }
