@@ -17,16 +17,16 @@
 
 ## 🛠 技术栈
 
-| 层级 | 技术 | 说明 |
-|------|------|------|
-| 服务端 | Node.js + Express | 静态托管、REST API、定时任务 |
-| 前端 | 原生 HTML/CSS/ES Modules | 零构建、轻量单页应用 |
-| 定时任务 | node-cron | 每周日 18:00 自动生成周报 |
-| 数据采集 | Fetch + Cheerio | 抓取并解析 GitHub Trending |
-| AI 解读 | DeepSeek API | 结构化中文导读生成 |
-| 图像生成 | 火山方舟 Seedream / OpenAI | 项目配图自动生成 |
-| 数据存储 | JSON 文件 | 轻量本地存储，适合单实例部署 |
-| 测试 | Node Test Runner | 内置测试框架，零依赖 |
+| 层级     | 技术                       | 说明                         |
+| -------- | -------------------------- | ---------------------------- |
+| 服务端   | Node.js + Express          | 静态托管、REST API、定时任务 |
+| 前端     | 原生 HTML/CSS/ES Modules   | 零构建、轻量单页应用         |
+| 定时任务 | node-cron                  | 每周日 18:00 自动生成周报    |
+| 数据采集 | Fetch + Cheerio            | 抓取并解析 GitHub Trending   |
+| AI 解读  | DeepSeek API               | 结构化中文导读生成           |
+| 图像生成 | 火山方舟 Seedream / OpenAI | 项目配图自动生成             |
+| 数据存储 | JSON 文件                  | 轻量本地存储，适合单实例部署 |
+| 测试     | Node Test Runner           | 内置测试框架，零依赖         |
 
 ## 📦 快速开始
 
@@ -67,39 +67,39 @@ npm run format       # 代码格式化
 
 复制 `.env.example` 为 `.env` 并按需填写：
 
-| 变量 | 必填 | 默认值 | 说明 |
-|------|------|--------|------|
-| `PORT` | 否 | `3000` | 服务监听端口 |
-| `DEEPSEEK_API_KEY` | 线上必填 | - | DeepSeek API 密钥 |
-| `DEEPSEEK_MODEL` | 否 | `deepseek-chat` | DeepSeek 模型名称 |
-| `DEEPSEEK_BASE_URL` | 否 | 官方地址 | DeepSeek API 地址（兼容 OpenAI 协议） |
-| `IMAGE_PROVIDER` | 否 | 自动识别 | 图像服务：`volcengine` 或 `openai` |
-| `VOLCENGINE_API_KEY` | 缺图时需要 | - | 火山方舟 API Key |
-| `VOLCENGINE_IMAGE_MODEL` | 火山时必填 | - | Seedream 模型 ID 或 Endpoint ID |
-| `VOLCENGINE_BASE_URL` | 否 | 官方地址 | 火山方舟 API 地址 |
-| `OPENAI_API_KEY` | 缺图时需要 | - | OpenAI API Key |
-| `OPENAI_IMAGE_MODEL` | 否 | `gpt-image-1` | OpenAI 图像模型 |
-| `ADMIN_TOKEN` | 建议 | - | 管理接口鉴权令牌 |
+| 变量                     | 必填       | 默认值          | 说明                                  |
+| ------------------------ | ---------- | --------------- | ------------------------------------- |
+| `PORT`                   | 否         | `3000`          | 服务监听端口                          |
+| `DEEPSEEK_API_KEY`       | 线上必填   | -               | DeepSeek API 密钥                     |
+| `DEEPSEEK_MODEL`         | 否         | `deepseek-chat` | DeepSeek 模型名称                     |
+| `DEEPSEEK_BASE_URL`      | 否         | 官方地址        | DeepSeek API 地址（兼容 OpenAI 协议） |
+| `IMAGE_PROVIDER`         | 否         | 自动识别        | 图像服务：`volcengine` 或 `openai`    |
+| `VOLCENGINE_API_KEY`     | 缺图时需要 | -               | 火山方舟 API Key                      |
+| `VOLCENGINE_IMAGE_MODEL` | 火山时必填 | -               | Seedream 模型 ID 或 Endpoint ID       |
+| `VOLCENGINE_BASE_URL`    | 否         | 官方地址        | 火山方舟 API 地址                     |
+| `OPENAI_API_KEY`         | 缺图时需要 | -               | OpenAI API Key                        |
+| `OPENAI_IMAGE_MODEL`     | 否         | `gpt-image-1`   | OpenAI 图像模型                       |
+| `ADMIN_TOKEN`            | 建议       | -               | 管理接口鉴权令牌                      |
 
 ## 📡 API 接口
 
 ### 公开接口
 
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| GET | `/api/report/latest` | 获取最新周报 |
-| GET | `/api/reports` | 获取所有周报列表 |
-| GET | `/api/report/:weekKey` | 获取指定周报 |
-| GET | `/api/rss` | RSS 订阅源 |
-| GET | `/api/report/:weekKey/export` | 导出周报为 Markdown |
+| 方法 | 路径                          | 说明                |
+| ---- | ----------------------------- | ------------------- |
+| GET  | `/api/report/latest`          | 获取最新周报        |
+| GET  | `/api/reports`                | 获取所有周报列表    |
+| GET  | `/api/report/:weekKey`        | 获取指定周报        |
+| GET  | `/api/rss`                    | RSS 订阅源          |
+| GET  | `/api/report/:weekKey/export` | 导出周报为 Markdown |
 
 ### 管理接口（需 ADMIN_TOKEN）
 
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| POST | `/api/admin/run-report` | 手动触发生成周报 |
+| 方法 | 路径                                    | 说明             |
+| ---- | --------------------------------------- | ---------------- |
+| POST | `/api/admin/run-report`                 | 手动触发生成周报 |
 | POST | `/api/project/:owner/:name/explanation` | 重新生成项目导读 |
-| POST | `/api/project/:owner/:name/media` | 重新生成项目配图 |
+| POST | `/api/project/:owner/:name/media`       | 重新生成项目配图 |
 
 ## 🐳 Docker 部署
 
@@ -184,6 +184,7 @@ npm run test:watch
 ```
 
 测试覆盖：
+
 - GitHub Trending HTML 解析
 - DeepSeek 请求构造
 - 重试机制
