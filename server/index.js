@@ -45,10 +45,12 @@ function createApp() {
   app.use(requestLogger);
 
   // 静态文件服务（前端页面）
-  app.use(express.static(path.resolve(__dirname, '../public'), {
-    maxAge: config.isProduction ? '1h' : 0,
-    etag: true
-  }));
+  app.use(
+    express.static(path.resolve(__dirname, '../public'), {
+      maxAge: config.isProduction ? '1h' : 0,
+      etag: true
+    })
+  );
 
   // ---------- API 路由 ----------
   app.use('/api', reportRoutes);

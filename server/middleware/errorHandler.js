@@ -68,9 +68,8 @@ export function badGateway(message = '上游服务错误') {
  * @param {Error} err - 错误对象
  * @param {import('express').Request} req - 请求对象
  * @param {import('express').Response} res - 响应对象
- * @param {import('express').NextFunction} _next - 下一个中间件（未使用）
+ * @param {import('express').NextFunction} _next - 下一个中间件（未使用，以下划线开头）
  */
-// eslint-disable-next-line no-unused-vars
 export function errorHandler(err, req, res, _next) {
   // 业务错误：直接返回状态码和消息
   if (err instanceof AppError) {
