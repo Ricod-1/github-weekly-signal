@@ -12,7 +12,7 @@ if (process.platform !== 'win32') {
 const output = run('powershell.exe', [
   '-NoProfile',
   '-Command',
-  "Get-NetTCPConnection -LocalPort 3000 -State Listen -ErrorAction SilentlyContinue | Select-Object -ExpandProperty OwningProcess"
+  'Get-NetTCPConnection -LocalPort 3000 -State Listen -ErrorAction SilentlyContinue | Select-Object -ExpandProperty OwningProcess'
 ]);
 const processIds = [...new Set(output.split(/\s+/).filter(Boolean))];
 
